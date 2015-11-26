@@ -1,0 +1,11 @@
+
+channel @piano 0
+channel @piano2 1
+channel @piano3 2
+
+@piano t120 l2 o0 v8 c8 d e e+' > c 4 < p -1 e p0 f8
+
+@piano3	o0 [l8 (cd) [> c]2 <]2 d d- d+
+
+@piano2 t80 l2 o0 v8 c8 d e e+' > c 4 < p-1 e p0 f8
+@piano e1
