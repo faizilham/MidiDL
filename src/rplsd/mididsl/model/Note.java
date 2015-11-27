@@ -57,7 +57,7 @@ public class Note implements Command, MidiMessage{
 		lengthDivider = exp2(lengthModifier-1);
 	}
 		
-	public void setup (int channelPitchTranspose, int currentOctave, int volume, int defaultLength, long startTick){
+	public void setup (int channelPitchTranspose, int currentOctave, int volume, int defaultLength, long startTick, int tempo){
 		this.startTick = startTick;
 		
 		if (length == 0) length = defaultLength;
@@ -71,7 +71,7 @@ public class Note implements Command, MidiMessage{
 		}
 		
 		// tempo in bpm, 1 beat = 1/4 note
-		long tickLength = 4 * PPQ * lengthMultiplier / (length * lengthDivider);
+		long tickLength = 4 * PPQ * Channel.BASE_TEMPO * lengthMultiplier / (length * lengthDivider * tempo);
 		
 		endTick = startTick + tickLength;
 		tickSet = true;
@@ -92,7 +92,7 @@ public class Note implements Command, MidiMessage{
 	@Override
 	public void processChannel(Channel channel) {
 		if (!isTickSet()){
-			setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), channel.getTicks());
+			setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), channel.getTicks(), channel.getTempo());
 		}
 		
 		channel.addMessage(this);

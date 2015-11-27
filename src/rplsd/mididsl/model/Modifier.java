@@ -9,6 +9,22 @@ public abstract class Modifier implements Command{
 		modifyChannel(channel);
 	}
 	
+	public static class Tempo extends Modifier {
+		public Tempo (int value){
+			this.value = value;
+		}
+		
+		@Override
+		public void modifyChannel(Channel channel) {
+			channel.setTempo(value);
+		}
+
+		@Override
+		public Command duplicate() {
+			return new Tempo(value);
+		}
+	}
+	
 	public static class Length extends Modifier{
 		public Length (int value){
 			this.value = value;

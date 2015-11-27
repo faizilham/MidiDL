@@ -11,8 +11,10 @@ import javax.sound.midi.SysexMessage;
 import javax.sound.midi.Track;
 
 public class Channel {
+	public static final int BASE_TEMPO = 120;
+	
 	private int instrument;
-	private int length, octave, volume, shift; // tempo in bpm, 1 beat = 1/4 note
+	private int length, octave, volume, shift, tempo; // tempo in bpm, 1 beat = 1/4 note
 	private ArrayList<MidiMessage> messages;
 	private long ticks;
 	private String name;
@@ -22,7 +24,7 @@ public class Channel {
 		messages = new ArrayList<>();
 		
 		// default value
-		length = 4; octave = 5; volume = 64; shift = 0; ticks = 32; // starting pause 64 ticks
+		tempo = BASE_TEMPO; length = 4; octave = 5; volume = 64; shift = 0; ticks = 32; // starting pause 64 ticks
 		this.name = name;
 	}
 	
@@ -43,12 +45,7 @@ public class Channel {
 		me = new MidiEvent(mt,(long)0);
 		track.add(me);
 		
-		// set default tempo (120 bpm)
-		/*mt = new MetaMessage();
-        byte[] bt = {(byte)0x07, (byte)0xA1, (byte)0x20};
-		mt.setMessage(0x51 ,bt, bt.length);
-		me = new MidiEvent(mt,(long)0);
-		track.add(me);*/
+		
 		
 		// set instrument TODO not yet
 		ShortMessage mm = new ShortMessage();
@@ -56,6 +53,13 @@ public class Channel {
 		me = new MidiEvent(mm,(long)0);
 		track.add(me);
 		
+		// set base tempo (120 bpm)
+		mt = new MetaMessage();
+        byte[] bt = {(byte)0x07, (byte)0xA1, (byte)0x20};
+		mt.setMessage(0x51 ,bt, bt.length);
+		me = new MidiEvent(mt,(long)0);
+		
+				
 		for (MidiMessage message : messages){
 			message.processMessage(track);
 		}
@@ -134,6 +138,14 @@ public class Channel {
 
 	public void setTicks(long ticks) {
 		this.ticks = ticks;
+	}
+
+	public int getTempo() {
+		return tempo;
+	}
+
+	public void setTempo(int tempo) {
+		this.tempo = tempo;
 	}
 	
 }
