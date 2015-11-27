@@ -31,7 +31,7 @@ public class Channel {
 	public Track generateTrack(Sequence seq) throws InvalidMidiDataException{
 		Track track = seq.createTrack();
 		
-		// turn on General MIDI sound set
+		// turn on general MIDI sound set
 		byte[] b = {(byte) 0xF0, 0x7E, 0x7F, 0x09, 0x01, (byte) 0xF7};
 		SysexMessage sm = new SysexMessage();
 		sm.setMessage(b, b.length);
@@ -45,11 +45,9 @@ public class Channel {
 		me = new MidiEvent(mt,(long)0);
 		track.add(me);
 		
-		
-		
 		// set instrument TODO not yet
 		ShortMessage mm = new ShortMessage();
-		mm.setMessage(0xC0, 0x00, 0x00);
+		mm.setMessage(0xC0, (byte) instrument, 0x00);
 		me = new MidiEvent(mm,(long)0);
 		track.add(me);
 		

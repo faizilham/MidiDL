@@ -19,16 +19,12 @@ public class MidiGenerator {
 		if (sqr == null) return;
 		sqr.open();
 		sqr.setSequence(seq);
-		System.out.println("start");
-		long time = System.currentTimeMillis();
+		
 		sqr.start();
 		
 		while(sqr.isRunning()){
 			Thread.sleep(100);
 		}
-		
-		time = System.currentTimeMillis() - time;
-		System.out.println(time);
 		
 		sqr.close();
 	}
