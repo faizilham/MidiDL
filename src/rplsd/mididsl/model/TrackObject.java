@@ -10,7 +10,7 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.SysexMessage;
 import javax.sound.midi.Track;
 
-public class Channel {
+public class TrackObject {
 	public static final int BASE_TEMPO = 120;
 	
 	private int instrument;
@@ -18,13 +18,15 @@ public class Channel {
 	private ArrayList<MidiMessage> messages;
 	private long ticks;
 	private String name;
+	private boolean percussion;
 	
-	public Channel(String name, int instrument){
+	public TrackObject(String name, int instrument, boolean percussion){
 		this.instrument = instrument;
 		messages = new ArrayList<>();
 		
 		// default value
 		tempo = BASE_TEMPO; length = 4; octave = 5; volume = 64; shift = 0; ticks = 32; // starting pause 64 ticks
+		this.percussion = percussion;
 		this.name = name;
 	}
 	
@@ -45,11 +47,13 @@ public class Channel {
 		me = new MidiEvent(mt,(long)0);
 		track.add(me);
 		
-		// set instrument TODO not yet
-		ShortMessage mm = new ShortMessage();
-		mm.setMessage(0xC0, (byte) instrument, 0x00);
-		me = new MidiEvent(mm,(long)0);
-		track.add(me);
+		// set instrument if not percussion
+		if (!percussion){
+			ShortMessage mm = new ShortMessage();
+			mm.setMessage(0xC0, (byte) instrument, 0x00);
+			me = new MidiEvent(mm,(long)0);
+			track.add(me);
+		}
 		
 		// set base tempo (120 bpm)
 		mt = new MetaMessage();
@@ -145,5 +149,8 @@ public class Channel {
 	public void setTempo(int tempo) {
 		this.tempo = tempo;
 	}
-	
+
+	public boolean isPercussion() {
+		return percussion;
+	}	
 }

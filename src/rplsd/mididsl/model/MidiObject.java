@@ -7,23 +7,23 @@ import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.Sequence;
 
 public class MidiObject {
-	private HashMap<String, Channel> channels;
+	private HashMap<String, TrackObject> tracks;
 	private HashMap<String, Playback.Section> groups;
 	
 	public MidiObject(){
-		channels = new HashMap<>();
+		tracks = new HashMap<>();
 		groups = new HashMap<>();
 	}
 	
 	public Sequence generateMidiSequence() throws InvalidMidiDataException{
 		Sequence seq = new Sequence(javax.sound.midi.Sequence.PPQ, Note.PPQ);
 		
-		Iterator <Entry<String, Channel>> it = channels.entrySet().iterator();
+		Iterator <Entry<String, TrackObject>> it = tracks.entrySet().iterator();
 		
 		
 		while (it.hasNext()){
-			Channel channel = it.next().getValue();
-			channel.generateTrack(seq);
+			TrackObject track = it.next().getValue();
+			track.generateTrack(seq);
 		}
 		
 		return seq;
@@ -37,16 +37,16 @@ public class MidiObject {
 		groups.put(groupName, group);
 	}
 	
-	public Channel getChannel(String channelName){
-		return channels.get(channelName);
+	public TrackObject getTrack(String name){
+		return tracks.get(name);
 	}
 	
-	public void addChannel(String channelName, int instrument){
-		channels.put(channelName, new Channel(channelName, instrument));
+	public void addTrack(String name, int instrument, boolean percussion){
+		tracks.put(name, new TrackObject(name, instrument, percussion));
 	}
 	
 	public String toString(){
-		Iterator <Entry<String, Channel>> it = channels.entrySet().iterator();
+		Iterator <Entry<String, TrackObject>> it = tracks.entrySet().iterator();
 		Iterator <Entry<String, Playback.Section>> itg = groups.entrySet().iterator();
 		StringBuilder sb = new StringBuilder();
 		
@@ -56,8 +56,8 @@ public class MidiObject {
 		}
 		
 		while (it.hasNext()){
-			Entry<String, Channel> e = it.next();
-			sb.append("channel ").append(e.getKey()).append('\n').append(e.getValue());
+			Entry<String, TrackObject> e = it.next();
+			sb.append("track ").append(e.getKey()).append('\n').append(e.getValue());
 		}
 		
 		return sb.toString();

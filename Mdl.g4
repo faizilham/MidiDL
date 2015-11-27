@@ -20,11 +20,13 @@ midi: statements;
 newline: '\n'+ | EOF | COMMENT;
 
 statements: newline* statement*;
-statement: (channel_declaration | include | section_declaration | channel) newline;
+statement: (track_declaration | percussion_declaration | include | section_declaration | track) newline;
 
-channel_declaration: '#channel' name=ID instrument=NUM;
+track_declaration: '#track' name=ID instrument=NUM;
+percussion_declaration: '#percussion' name=ID;
+
 section_declaration: '#section' name=ID command+;
-channel: channel_name=ID command+;
+track: track_name=ID command+;
 include: '#include' filename=STRING;
 
 command: note | modifiers | playback;

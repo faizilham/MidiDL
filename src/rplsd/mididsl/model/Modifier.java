@@ -2,11 +2,11 @@ package rplsd.mididsl.model;
 
 public abstract class Modifier implements Command{
 	protected int value;
-	public abstract void modifyChannel (Channel channel);
+	public abstract void modifyTrack (TrackObject track);
 	
 	@Override
-	public void processChannel(Channel channel){
-		modifyChannel(channel);
+	public void processTrack(TrackObject track){
+		modifyTrack(track);
 	}
 	
 	public static class Tempo extends Modifier {
@@ -15,8 +15,8 @@ public abstract class Modifier implements Command{
 		}
 		
 		@Override
-		public void modifyChannel(Channel channel) {
-			channel.setTempo(value);
+		public void modifyTrack(TrackObject track) {
+			track.setTempo(value);
 		}
 
 		@Override
@@ -31,8 +31,8 @@ public abstract class Modifier implements Command{
 		}
 		
 		@Override
-		public void modifyChannel(Channel channel) {
-			channel.setLength(value);
+		public void modifyTrack(TrackObject track) {
+			track.setLength(value);
 		}
 		
 		@Override
@@ -51,11 +51,11 @@ public abstract class Modifier implements Command{
 		}
 		
 		@Override
-		public void modifyChannel(Channel channel) {
+		public void modifyTrack(TrackObject track) {
 			if (increase){
-				channel.setOctave(channel.getOctave() + value);
+				track.setOctave(track.getOctave() + value);
 			} else {
-				channel.setOctave(value);
+				track.setOctave(value);
 			}
 			
 		}
@@ -76,11 +76,11 @@ public abstract class Modifier implements Command{
 		}
 		
 		@Override
-		public void modifyChannel(Channel channel) {
+		public void modifyTrack(TrackObject track) {
 			if (increase){
-				channel.setVolume(channel.getVolume() + value);
+				track.setVolume(track.getVolume() + value);
 			} else {
-				channel.setVolume(value);
+				track.setVolume(value);
 			}
 		}
 		
@@ -99,11 +99,11 @@ public abstract class Modifier implements Command{
 			this.value = value;
 		}
 		@Override
-		public void modifyChannel(Channel channel) {
+		public void modifyTrack(TrackObject track) {
 			if (increase){
-				channel.setShift(channel.getShift() + value);
+				track.setShift(track.getShift() + value);
 			} else {
-				channel.setShift(value);
+				track.setShift(value);
 			}
 		}
 		

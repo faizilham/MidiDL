@@ -11,12 +11,12 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import rplsd.mididsl.compiler.MdlParser.Shift_signContext;
-import rplsd.mididsl.model.Channel;
 import rplsd.mididsl.model.Command;
 import rplsd.mididsl.model.MidiObject;
 import rplsd.mididsl.model.Modifier;
 import rplsd.mididsl.model.Note;
 import rplsd.mididsl.model.Playback;
+import rplsd.mididsl.model.TrackObject;
 
 public class MidiVisitor extends MdlBaseVisitor<Object> {
 	
@@ -46,10 +46,16 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 		return null;
 	}
 	
-	@Override public Object visitChannel_declaration(@NotNull MdlParser.Channel_declarationContext ctx) {
-		String channelName = ctx.name.getText();
+	@Override public Object visitTrack_declaration(@NotNull MdlParser.Track_declarationContext ctx) {
+		String name = ctx.name.getText();
 		int instrument = Integer.parseInt(ctx.instrument.getText());
-		midi.addChannel(channelName, instrument);		
+		midi.addTrack(name, instrument, false);		
+		return visitChildren(ctx); 
+	}
+	
+	@Override public Object visitPercussion_declaration(@NotNull MdlParser.Percussion_declarationContext ctx) {
+		String name = ctx.name.getText();
+		midi.addTrack(name, 0, true);
 		return visitChildren(ctx); 
 	}
 	
@@ -66,24 +72,22 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 		return group;
 	}
 	
-	@Override public Object visitChannel(@NotNull MdlParser.ChannelContext ctx) {
-		Channel currentChannel = midi.getChannel(ctx.channel_name.getText());
+	@Override public Object visitTrack(@NotNull MdlParser.TrackContext ctx) {
+		TrackObject track = midi.getTrack(ctx.track_name.getText());
 		
-		if (currentChannel == null) {
-			throw new RuntimeErrorException(new Error("Can't found channel " + ctx.channel_name.getText()));
+		if (track == null) {
+			throw new RuntimeErrorException(new Error("Can't found track " + ctx.track_name.getText()));
 		}
 		
 		for (MdlParser.CommandContext child : ctx.command()){
 			Command command = (Command) visit(child);
-			if (command != null) command.processChannel(currentChannel);
+			if (command != null) command.processTrack(track);
 		}
 		
-		return currentChannel;
+		return track;
 	}
 	
 	@Override public Note visitNote(@NotNull MdlParser.NoteContext ctx) {
-		// get channel default
-		
 		// read token
 		String baseNote = ctx.base.getText();
 		

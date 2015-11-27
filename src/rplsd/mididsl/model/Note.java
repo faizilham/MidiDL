@@ -29,6 +29,7 @@ public class Note implements Command, MidiMessage{
 	private int octaveShift;
 	private boolean tickSet;
 	private boolean rest;
+	private boolean percussion;
 	
 	private Note(){}
 	
@@ -57,7 +58,7 @@ public class Note implements Command, MidiMessage{
 		lengthDivider = exp2(lengthModifier-1);
 	}
 		
-	public void setup (int channelPitchTranspose, int currentOctave, int volume, int defaultLength, long startTick, int tempo){
+	public void setup (int trackPitchTranspose, int currentOctave, int volume, int defaultLength, long startTick, int tempo, boolean percussion){
 		this.startTick = startTick;
 		
 		if (length == 0) length = defaultLength;
@@ -67,14 +68,15 @@ public class Note implements Command, MidiMessage{
 		} else {
 			this.volume = volume;
 			int octave = currentOctave + octaveShift;
-			midinote += channelPitchTranspose + 12*octave;
+			midinote += trackPitchTranspose + 12*octave;
 		}
 		
 		// tempo in bpm, 1 beat = 1/4 note
-		long tickLength = 4 * PPQ * Channel.BASE_TEMPO * lengthMultiplier / (length * lengthDivider * tempo);
+		long tickLength = 4 * PPQ * TrackObject.BASE_TEMPO * lengthMultiplier / (length * lengthDivider * tempo);
 		
 		endTick = startTick + tickLength;
 		tickSet = true;
+		this.percussion = percussion;
 	}
 	
 	@Override
@@ -85,36 +87,37 @@ public class Note implements Command, MidiMessage{
 		note.startTick = startTick; note.endTick = endTick;
 		note.volume = volume; note.length = length;
 		note.lengthMultiplier = lengthMultiplier; note.lengthDivider = lengthDivider;
-		note.octaveShift = octaveShift; note.tickSet = tickSet; note.rest = rest;
+		note.octaveShift = octaveShift; note.tickSet = tickSet; note.rest = rest; note.percussion = percussion;
 		return note;
 	}
 	
 	@Override
-	public void processChannel(Channel channel) {
+	public void processTrack(TrackObject track) {
 		if (!isTickSet()){
-			setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), channel.getTicks(), channel.getTempo());
+			setup(track.getShift(), track.getOctave(), track.getVolume(), track.getLength(), track.getTicks(), track.getTempo(), track.isPercussion());
 		}
 		
-		channel.addMessage(this);
-		channel.setTicks(endTick);
+		track.addMessage(this);
+		track.setTicks(endTick);
 	}
 	
 	@Override
-	public void processMessage(Track track) {
+	public void processMessage(Track miditrack) {
 		if (rest) return;
 		
 		try {
 			// note on
+			byte channel = (byte) (percussion ? 9 : 0);
 			ShortMessage mm = new ShortMessage();
-			mm.setMessage(0x90, midinote, volume);
+			mm.setMessage(0x90 + channel, midinote, volume);
 			MidiEvent me = new MidiEvent(mm,(long) startTick);
-			track.add(me);
+			miditrack.add(me);
 
 			// note off
 			mm = new ShortMessage();
-			mm.setMessage(0x80, midinote, volume);
+			mm.setMessage(0x80 + channel, midinote, volume);
 			me = new MidiEvent(mm,(long) endTick);
-			track.add(me);
+			miditrack.add(me);
 		} catch (Exception e){
 			e.printStackTrace();
 		}		

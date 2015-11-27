@@ -1,4 +1,5 @@
-#channel @piano5 11
+
+#track @piano5 11
 #section @chord1 o2 (cba) o0
 
 #section @test3 cde (cde)

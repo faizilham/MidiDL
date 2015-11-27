@@ -3,10 +3,10 @@ package rplsd.mididsl.model;
 import java.util.ArrayList;
 
 public abstract class Playback implements Command{
-	public abstract void modifyChannel (Channel channel);
+	public abstract void modifyChannel (TrackObject channel);
 	
 	@Override
-	public void processChannel(Channel channel){
+	public void processTrack(TrackObject channel){
 		modifyChannel(channel);
 	}
 	
@@ -21,10 +21,10 @@ public abstract class Playback implements Command{
 		}
 		
 		@Override
-		public void modifyChannel(Channel channel) {
+		public void modifyChannel(TrackObject channel) {
 			long lastTick = 0;
 			for (Note note : notes){
-				note.setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), channel.getTicks(), channel.getTempo());
+				note.setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), channel.getTicks(), channel.getTempo(), channel.isPercussion());
 				channel.addMessage(note);
 				lastTick = note.getEndTick();
 			}
@@ -56,9 +56,9 @@ public abstract class Playback implements Command{
 		}
 
 		@Override
-		public void modifyChannel(Channel channel) {
+		public void modifyChannel(TrackObject channel) {
 			for (Command command : commands){
-				command.processChannel(channel);
+				command.processTrack(channel);
 			}
 		}
 
@@ -84,10 +84,10 @@ public abstract class Playback implements Command{
 		}
 		
 		@Override
-		public void modifyChannel(Channel channel) {
+		public void modifyChannel(TrackObject channel) {
 			for (Command command : commands){
 				Command copyCommand = command.duplicate();
-				copyCommand.processChannel(channel);
+				copyCommand.processTrack(channel);
 			}
 		}
 		

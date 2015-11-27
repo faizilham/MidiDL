@@ -1,6 +1,6 @@
 package rplsd.mididsl.model;
 
 public interface Command {
-	public void processChannel(Channel channel);
+	public void processTrack(TrackObject channel);
 	public Command duplicate();
 }
