@@ -24,11 +24,23 @@ public interface MdlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitHarmony(@NotNull MdlParser.HarmonyContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MdlParser#octave}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOctave(@NotNull MdlParser.OctaveContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MdlParser#channel}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitChannel(@NotNull MdlParser.ChannelContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MdlParser#length}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLength(@NotNull MdlParser.LengthContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MdlParser#tempo}.
 	 * @param ctx the parse tree
@@ -48,17 +60,29 @@ public interface MdlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitModifiers(@NotNull MdlParser.ModifiersContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MdlParser#octave_up}.
+	 * Visit a parse tree produced by {@link MdlParser#command}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitOctave_up(@NotNull MdlParser.Octave_upContext ctx);
+	T visitCommand(@NotNull MdlParser.CommandContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MdlParser#pitch_transpose}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPitch_transpose(@NotNull MdlParser.Pitch_transposeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MdlParser#volume}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVolume(@NotNull MdlParser.VolumeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MdlParser#pitch_shift_sign}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPitch_shift_sign(@NotNull MdlParser.Pitch_shift_signContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MdlParser#tie}.
 	 * @param ctx the parse tree
@@ -78,11 +102,11 @@ public interface MdlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNewline(@NotNull MdlParser.NewlineContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MdlParser#octave_down}.
+	 * Visit a parse tree produced by {@link MdlParser#length_shift_sign}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitOctave_down(@NotNull MdlParser.Octave_downContext ctx);
+	T visitLength_shift_sign(@NotNull MdlParser.Length_shift_signContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MdlParser#loop}.
 	 * @param ctx the parse tree
@@ -96,60 +120,6 @@ public interface MdlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatement(@NotNull MdlParser.StatementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MdlParser#group_declaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGroup_declaration(@NotNull MdlParser.Group_declarationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MdlParser#group}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGroup(@NotNull MdlParser.GroupContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MdlParser#octave}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOctave(@NotNull MdlParser.OctaveContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MdlParser#length}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLength(@NotNull MdlParser.LengthContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MdlParser#shift_octave}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitShift_octave(@NotNull MdlParser.Shift_octaveContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MdlParser#command}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCommand(@NotNull MdlParser.CommandContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MdlParser#volume}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVolume(@NotNull MdlParser.VolumeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MdlParser#pitch_shift_sign}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPitch_shift_sign(@NotNull MdlParser.Pitch_shift_signContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MdlParser#channels}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitChannels(@NotNull MdlParser.ChannelsContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MdlParser#channel_declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -161,4 +131,22 @@ public interface MdlVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPlaythrough(@NotNull MdlParser.PlaythroughContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MdlParser#group_declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGroup_declaration(@NotNull MdlParser.Group_declarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MdlParser#shift_sign}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitShift_sign(@NotNull MdlParser.Shift_signContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MdlParser#group}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGroup(@NotNull MdlParser.GroupContext ctx);
 }

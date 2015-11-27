@@ -6,15 +6,19 @@ ID: '@'[A-Za-z_]+[0-9A-Za-z_]*;
 
 PLUS: '+';
 MINUS: '-';
+DOT: '.';
 
 OCTAVE_SHIFT: '\''+;
-BASE_NOTE: 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g';
+BASE_NOTE: 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'r';
 STRING: '"' ~[\r\n"]+ '"';
+UP: '>';
+DOWN: '<';
 
 midi: statements;
 
 newline: '\n'+ | EOF;
 pitch_shift_sign: PLUS+ | MINUS+;
+length_shift_sign: DOT+;
 
 statements: newline* (statement newline)*;
 statement: channel_declaration | group_declaration | channel;
@@ -25,19 +29,23 @@ channel: channel_name=ID command+;
 
 command: note | modifiers | playthrough;
 
-note: base=BASE_NOTE (pitch_shift=pitch_shift_sign)? (octave_shift=OCTAVE_SHIFT)? (note_length=NUM)?;
+note: base=BASE_NOTE (pitch_shift=pitch_shift_sign)? (octave_shift=OCTAVE_SHIFT)? (note_length=NUM)? (length_shift=length_shift_sign)?;
 
-modifiers: tempo | length | octave | volume | shift_octave | pitch_transpose;
+modifiers: tempo | length | octave | volume | pitch_transpose;
 tempo: 't' value=NUM;
 length: 'l' value=NUM;
-octave: 'o' value=NUM;
-volume: 'v' value=NUM;
 
+shift_sign: UP | DOWN;
+octave: 'o' (shift=shift_sign (value=NUM)? | value=NUM);
+volume: 'v' (shift=shift_sign (value=NUM)? | value=NUM);
+pitch_transpose: 'p' (shift=shift_sign (value=NUM)? | ((negative=MINUS)? value=NUM));
+
+/*
 shift_octave: octave_up | octave_down;
 octave_up: '>';
 octave_down: '<';
+*/
 
-pitch_transpose: 'p' (negative=MINUS)? value=NUM;
 
 playthrough: tie | harmony | loop | group;
 

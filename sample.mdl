@@ -6,9 +6,9 @@
 #group @cf f+8
 #group @am (cde) @cf
 
-@piano t120 l2 o0 v8 c8 d e e+' > c4 < p-1 e p0 f8
+@piano t120 l2 o0 v8 c8 d e e+' o> c4 o< p-1 e p0 f8
 
-@piano3	o0 [l8 (cd) [> c]2 <]2 d d- d+
+@piano3	o0 [l8 (cd) [o> c]2 o<]2 d r4 d+
 
-@piano2 o0 [> @am]2
+@piano2 o0 p0 [p>10 @am]2
 @piano e1

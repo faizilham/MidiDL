@@ -35,7 +35,7 @@ public class MidiObject {
 		
 		while(itg.hasNext()) {
 			Entry<String, Playback.Group> e = itg.next();
-			sb.append("group ").append(e.getKey()).append('\n').append(e.getValue());
+			sb.append("group ").append(e.getKey()).append('\n').append(e.getValue()).append('\n');
 		}
 		
 		while (it.hasNext()){

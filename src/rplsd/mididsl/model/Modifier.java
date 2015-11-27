@@ -43,74 +43,74 @@ public abstract class Modifier implements Command{
 	}
 	
 	public static class Octave extends Modifier{
-		public Octave (int value){
+		private boolean increase;
+		public static int DEFAULT_INCREASE = 1;
+		
+		public Octave (int value, boolean increase){
+			this.increase = increase;
 			this.value = value;
 		}
 		
 		@Override
 		public void modifyChannel(Channel channel) {
-			channel.setOctave(value);
+			if (increase){
+				channel.setOctave(channel.getOctave() + value);
+			} else {
+				channel.setOctave(value);
+			}
+			
 		}
 		
 		@Override
 		public Command duplicate() {
-			return new Octave(value);
+			return new Octave(value, increase);
 		}
 	}
 	
 	public static class Volume extends Modifier{
-		public Volume (int value){
+		private boolean increase;
+		public static int DEFAULT_INCREASE = 1;
+		
+		public Volume (int value, boolean increase){
+			this.increase = increase;
 			this.value = value;
 		}
 		
 		@Override
 		public void modifyChannel(Channel channel) {
-			channel.setVolume(value);
+			if (increase){
+				channel.setVolume(channel.getVolume() + value);
+			} else {
+				channel.setVolume(value);
+			}
 		}
 		
 		@Override
 		public Command duplicate() {
-			return new Volume(value);
-		}
-	}
-	
-	public static class OctaveUp extends Modifier{		
-		@Override
-		public void modifyChannel(Channel channel) {
-			channel.setOctave(channel.getOctave() + 1);
-		}
-		
-		@Override
-		public Command duplicate() {
-			return new OctaveUp();
-		}
-	}
-	
-	public static class OctaveDown extends Modifier{		
-		@Override
-		public void modifyChannel(Channel channel) {
-			channel.setOctave(channel.getOctave() - 1);
-		}
-		
-		@Override
-		public Command duplicate() {
-			return new OctaveDown();
+			return new Volume(value, increase);
 		}
 	}
 	
 	public static class PitchTranspose extends Modifier{
-		public PitchTranspose (int value){
+		private boolean increase;
+		public static int DEFAULT_INCREASE = 1;
+		
+		public PitchTranspose (int value, boolean increase){
+			this.increase = increase;
 			this.value = value;
 		}
-		
 		@Override
 		public void modifyChannel(Channel channel) {
-			channel.setShift(value);
+			if (increase){
+				channel.setShift(channel.getShift() + value);
+			} else {
+				channel.setShift(value);
+			}
 		}
 		
 		@Override
 		public Command duplicate() {
-			return new PitchTranspose(value);
+			return new PitchTranspose(value, increase);
 		}
 	}
 }

@@ -2,8 +2,10 @@ package rplsd.mididsl.compiler;
 
 import javax.management.RuntimeErrorException;
 
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.NotNull;
 
+import rplsd.mididsl.compiler.MdlParser.Shift_signContext;
 import rplsd.mididsl.model.Channel;
 import rplsd.mididsl.model.Command;
 import rplsd.mididsl.model.MidiObject;
@@ -15,6 +17,7 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 	
 	private MidiObject midi;
 	private static final char FLAT_NOTE = '-';
+	private static final char DEC_SIGN = '<';
 	
 	@Override public MidiObject visitMidi(@NotNull MdlParser.MidiContext ctx) {
 		midi = new MidiObject();
@@ -143,31 +146,33 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 		return new Modifier.Length(value); 
 	}
 	
-	@Override public Modifier visitOctave(@NotNull MdlParser.OctaveContext ctx) {
-		int value = Integer.parseInt(ctx.value.getText());
+	private int[] readIncrease(Token value, Shift_signContext shift, int defaultIncrease){
+		int val; int increase;
+				
+		if (shift == null){ // set modifier
+			val = Integer.parseInt(value.getText());
+			increase = 0;
+		} else { // increase modifier
+			val = (value == null) ? defaultIncrease : Integer.parseInt(value.getText());
+			increase = 1;
+			if (shift.getText().charAt(0) == DEC_SIGN) val = -val;
+		}
 		
-		return new Modifier.Octave(value); 
+		return new int[]{val, increase};
+	}
+	
+	@Override public Modifier visitOctave(@NotNull MdlParser.OctaveContext ctx) {
+		int[] result = readIncrease(ctx.value, ctx.shift, Modifier.Octave.DEFAULT_INCREASE);
+		return new Modifier.Octave(result[0], result[1] != 0); 
 	}
 	
 	@Override public Modifier visitVolume(@NotNull MdlParser.VolumeContext ctx) {
-		int value = Integer.parseInt(ctx.value.getText());
-		
-		return new Modifier.Volume(value); 
-	}
-	
-	@Override public Modifier visitOctave_up(@NotNull MdlParser.Octave_upContext ctx) {
-		return new Modifier.OctaveUp();
-	}
-	
-	@Override public Modifier visitOctave_down(@NotNull MdlParser.Octave_downContext ctx) {
-		return new Modifier.OctaveDown();
+		int[] result = readIncrease(ctx.value, ctx.shift, Modifier.Volume.DEFAULT_INCREASE);
+		return new Modifier.Volume(result[0], result[1] != 0); 
 	}
 	
 	@Override public Modifier visitPitch_transpose(@NotNull MdlParser.Pitch_transposeContext ctx) {
-		int value = Integer.parseInt(ctx.value.getText());
-		
-		if (ctx.negative != null) value = -value;
-		
-		return new Modifier.PitchTranspose(value); 
+		int[] result = readIncrease(ctx.value, ctx.shift, Modifier.PitchTranspose.DEFAULT_INCREASE);
+		return new Modifier.PitchTranspose(result[0], result[1] != 0);  
 	}
 }
