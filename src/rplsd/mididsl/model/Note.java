@@ -1,6 +1,13 @@
 package rplsd.mididsl.model;
 
-public class Note implements Command{
+import javax.sound.midi.MidiEvent;
+import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Track;
+
+public class Note implements Command, MidiMessage{
+	
+	public static int PPQ = 128; 
+	
 	private static int getBaseNoteNumber(String noteStr){
 		char noteCode = noteStr.toUpperCase().charAt(0);
 		switch(noteCode){
@@ -50,7 +57,7 @@ public class Note implements Command{
 		lengthDivider = exp2(lengthModifier-1);
 	}
 		
-	public void setup (int channelPitchTranspose, int currentOctave, int volume, int defaultLength, long startTick, int tempo){
+	public void setup (int channelPitchTranspose, int currentOctave, int volume, int defaultLength, long startTick){
 		this.startTick = startTick;
 		
 		if (length == 0) length = defaultLength;
@@ -64,8 +71,7 @@ public class Note implements Command{
 		}
 		
 		// tempo in bpm, 1 beat = 1/4 note
-		long delayPerBeat = 60000 / tempo; // in millisecond
-		long tickLength = 4 * delayPerBeat * lengthMultiplier / (length * lengthDivider);
+		long tickLength = 4 * PPQ * lengthMultiplier / (length * lengthDivider);
 		
 		endTick = startTick + tickLength;
 		tickSet = true;
@@ -86,11 +92,32 @@ public class Note implements Command{
 	@Override
 	public void processChannel(Channel channel) {
 		if (!isTickSet()){
-			setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), channel.getTicks(), channel.getTempo());
+			setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), channel.getTicks());
 		}
 		
-		channel.addNote(this);
+		channel.addMessage(this);
 		channel.setTicks(endTick);
+	}
+	
+	@Override
+	public void processMessage(Track track) {
+		if (rest) return;
+		
+		try {
+			// note on
+			ShortMessage mm = new ShortMessage();
+			mm.setMessage(0x90, midinote, volume);
+			MidiEvent me = new MidiEvent(mm,(long) startTick);
+			track.add(me);
+
+			// note off
+			mm = new ShortMessage();
+			mm.setMessage(0x80, midinote, volume);
+			me = new MidiEvent(mm,(long) endTick);
+			track.add(me);
+		} catch (Exception e){
+			e.printStackTrace();
+		}		
 	}
 	
 	public String toString(){

@@ -24,8 +24,8 @@ public abstract class Playback implements Command{
 		public void modifyChannel(Channel channel) {
 			long lastTick = 0;
 			for (Note note : notes){
-				note.setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), channel.getTicks(), channel.getTempo());
-				channel.addNote(note);
+				note.setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), channel.getTicks());
+				channel.addMessage(note);
 				lastTick = note.getEndTick();
 			}
 			

@@ -17,6 +17,7 @@ import rplsd.mididsl.model.MidiObject;
 import rplsd.mididsl.model.Modifier;
 import rplsd.mididsl.model.Note;
 import rplsd.mididsl.model.Playback;
+import rplsd.mididsl.model.Tempo;
 
 public class MidiVisitor extends MdlBaseVisitor<Object> {
 	
@@ -156,7 +157,7 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 	@Override public Modifier visitTempo(@NotNull MdlParser.TempoContext ctx) {
 		int value = Integer.parseInt(ctx.value.getText());
 		
-		return new Modifier.Tempo(value); 
+		return new Tempo(value); 
 	}
 	
 	@Override public Modifier visitLength(@NotNull MdlParser.LengthContext ctx) {

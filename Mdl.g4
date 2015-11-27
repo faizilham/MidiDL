@@ -3,6 +3,7 @@ grammar Mdl;
 NUM: [0-9]+;
 WS: [ \t\r]+ -> skip;
 ID: '@'[A-Za-z_]+[0-9A-Za-z_]*;
+COMMENT: '//' ~[\n]+ -> skip;
 
 PLUS: '+';
 MINUS: '-';
@@ -16,7 +17,7 @@ DOWN: '<';
 
 midi: statements;
 
-newline: '\n'+ | EOF;
+newline: '\n'+ | EOF | COMMENT;
 
 statements: newline* statement*;
 statement: (channel_declaration | include | section_declaration | channel) newline;

@@ -3,6 +3,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.Sequence;
+
 public class MidiObject {
 	private HashMap<String, Channel> channels;
 	private HashMap<String, Playback.Section> groups;
@@ -10,6 +13,20 @@ public class MidiObject {
 	public MidiObject(){
 		channels = new HashMap<>();
 		groups = new HashMap<>();
+	}
+	
+	public Sequence generateMidiSequence() throws InvalidMidiDataException{
+		Sequence seq = new Sequence(javax.sound.midi.Sequence.PPQ, Note.PPQ);
+		
+		Iterator <Entry<String, Channel>> it = channels.entrySet().iterator();
+		
+		
+		while (it.hasNext()){
+			Channel channel = it.next().getValue();
+			channel.generateTrack(seq);
+		}
+		
+		return seq;
 	}
 	
 	public Playback.Section getGroup(String groupName){
@@ -25,7 +42,7 @@ public class MidiObject {
 	}
 	
 	public void addChannel(String channelName, int instrument){
-		channels.put(channelName, new Channel(instrument));
+		channels.put(channelName, new Channel(channelName, instrument));
 	}
 	
 	public String toString(){

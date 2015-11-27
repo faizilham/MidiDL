@@ -1,4 +1,9 @@
 #channel @piano7 0
-#section @chord1 (cba)
+#channel @piano6 0
+#channel @piano5 0
+#section @chord1 o2 (cba) o0
 
-@piano7 l8aaaa
+#section @test [cde r8 (cde) o> ]2
+#section @setting o5 t300 l4
+
+@piano5 @setting @test

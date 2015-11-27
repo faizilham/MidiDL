@@ -1,4 +1,6 @@
 #include "test.mdl"
+
+// setup channels
 #channel @piano 0
 #channel @piano2 1
 #channel @piano3 2
@@ -6,9 +8,9 @@
 #section @cf f+8
 #section @am (cde) @cf
 
-@piano t120 l2 o0 v8 c8 d e e+' o> c4 o< p-1 e p0 f8
+@piano t120 l2 o0 v8 c8dee+' o> c4 o< p-1 e p0 f16 
 
-@piano3	o0 [l8 (cd) [o> c]2 o<]2 d r4.. d+.
+@piano3	o0 [ l8 (cd) [ o>c ]2 o< ]2 d r4.. d+.
 
 @piano2 o0 p0 [p>10 @am]2
-@piano2 o0 @chord1
+@piano2 o0 c @chord1 c
