@@ -151,11 +151,6 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 		return group;
 	}
 	
-	@Override public Object visitTie(@NotNull MdlParser.TieContext ctx){
-		//return visitChildren(ctx);
-		return null;
-	}
-	
 	/*** Modifiers Object ***/
 	@Override public Modifier visitTempo(@NotNull MdlParser.TempoContext ctx) {
 		int value = Integer.parseInt(ctx.value.getText());

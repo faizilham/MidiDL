@@ -44,9 +44,8 @@ octave: 'o' (shift=shift_sign (value=NUM)? | value=NUM);
 volume: 'v' (shift=shift_sign (value=NUM)? | value=NUM);
 pitch_transpose: 'p' (shift=shift_sign (value=NUM)? | ((negative=MINUS)? value=NUM));
 
-playback: tie | harmony | loop | section;
+playback: harmony | loop | section;
 
 section: name=ID;
-tie: note1=note '&' note2=note;
 harmony: '(' note+ ')';
 loop: '[' command+ ']' value=NUM;
