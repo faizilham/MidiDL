@@ -18,13 +18,18 @@ public class Note implements Command{
 	private long startTick, endTick; // in millisecond
 	private int volume;
 	private int length;
+	private int lengthMultiplier, lengthDivider;
 	private int octaveShift;
 	private boolean tickSet;
 	private boolean rest;
 	
 	private Note(){}
 	
-	public Note (String noteStr, int pitchShift, int octaveShift, int length){
+	private static int exp2(int n){
+		return 1 << n;
+	}
+	
+	public Note (String noteStr, int pitchShift, int octaveShift, int length, int halfLength){
 		int basenum = getBaseNoteNumber(noteStr);
 		
 		if (basenum == -1){
@@ -39,7 +44,13 @@ public class Note implements Command{
 		this.length = length;
 		tickSet = false;
 		
+		int lengthModifier = 1 + halfLength;
+		
+		lengthMultiplier = (exp2(lengthModifier) - 1);
+		lengthDivider = exp2(lengthModifier-1);
 	}
+	
+	
 	
 	public void setup (int channelPitchTranspose, int currentOctave, int volume, int defaultLength, long startTick, int tempo){
 		this.startTick = startTick;
@@ -56,7 +67,7 @@ public class Note implements Command{
 		
 		// tempo in bpm, 1 beat = 1/4 note
 		long delayPerBeat = 60000 / tempo; // in millisecond
-		long tickLength = 4 * delayPerBeat / length;
+		long tickLength = 4 * delayPerBeat * lengthMultiplier / (length * lengthDivider);
 		
 		endTick = startTick + tickLength;
 		tickSet = true;
@@ -69,6 +80,7 @@ public class Note implements Command{
 		note.midinote = midinote;
 		note.startTick = startTick; note.endTick = endTick;
 		note.volume = volume; note.length = length;
+		note.lengthMultiplier = lengthMultiplier; note.lengthDivider = lengthDivider;
 		note.octaveShift = octaveShift; note.tickSet = tickSet; note.rest = rest;
 		return note;
 	}
@@ -84,7 +96,7 @@ public class Note implements Command{
 	}
 	
 	public String toString(){
-		return String.format("(%d, %d-%d %d, %d)", midinote, startTick, endTick, length, volume);
+		return String.format("(%d, %d-%d %d/%d, %d)", midinote, startTick, endTick, lengthMultiplier, length*lengthDivider, volume);
 	}
 	
 	public boolean isTickSet(){

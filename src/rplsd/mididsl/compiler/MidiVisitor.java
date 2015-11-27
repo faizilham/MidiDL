@@ -69,11 +69,7 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 		int pitchShift = 0; String pitchShiftStr;
 		if ((ctx.pitch_shift != null) && ((pitchShiftStr = ctx.pitch_shift.getText()) != null)){
 			pitchShift = pitchShiftStr.length();
-			if (pitchShiftStr.charAt(0) == FLAT_NOTE){
-				
-				pitchShift = -pitchShift;
-				
-			}
+			if (pitchShiftStr.charAt(0) == FLAT_NOTE) pitchShift = -pitchShift;
 		}
 		
 		int octaveShift = 0;
@@ -82,10 +78,15 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 		}
 		
 		String lenStr = ctx.note_length == null ? null : ctx.note_length.getText();
-		int length = (lenStr == null) ? 0 : Integer.parseInt(lenStr); 
+		int length = (lenStr == null) ? 0 : Integer.parseInt(lenStr);
+		
+		int halfLength = 0;
+		if (ctx.length_shift != null){
+			halfLength = ctx.length_shift.getText().length();
+		}
 		
 		// build object
-		return new Note (baseNote, pitchShift, octaveShift, length); 
+		return new Note (baseNote, pitchShift, octaveShift, length, halfLength); 
 	}
 	
 	/*** Playback Object ***/
