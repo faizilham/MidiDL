@@ -1,9 +1,14 @@
 package rplsd.mididsl.compiler;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 import javax.management.RuntimeErrorException;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.NotNull;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import rplsd.mididsl.compiler.MdlParser.Shift_signContext;
 import rplsd.mididsl.model.Channel;
@@ -15,14 +20,30 @@ import rplsd.mididsl.model.Playback;
 
 public class MidiVisitor extends MdlBaseVisitor<Object> {
 	
-	private MidiObject midi;
+	private MidiObject midi = null;
 	private static final char FLAT_NOTE = '-';
 	private static final char DEC_SIGN = '<';
 	
 	@Override public MidiObject visitMidi(@NotNull MdlParser.MidiContext ctx) {
-		midi = new MidiObject();
+		if (midi == null)
+			midi = new MidiObject();
 		visitChildren(ctx);
 		return midi; 
+	}
+	
+	@Override public Object visitInclude(@NotNull MdlParser.IncludeContext ctx) {
+		String filename = ctx.filename.getText();
+		filename = filename.substring(1, filename.length() - 1);
+		
+		try {
+			MdlReader reader = new MdlReader();
+			ParseTree tree = reader.parse(new FileInputStream(new File(filename)));
+			visit(tree);
+		} catch (IOException e) {
+			throw new RuntimeErrorException(new Error("File not found: " + filename));
+		}
+		
+		return null;
 	}
 	
 	@Override public Object visitChannel_declaration(@NotNull MdlParser.Channel_declarationContext ctx) {
@@ -32,9 +53,9 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 		return visitChildren(ctx); 
 	}
 	
-	@Override public Playback.Group visitGroup_declaration(@NotNull MdlParser.Group_declarationContext ctx) {
+	@Override public Playback.Section visitSection_declaration(@NotNull MdlParser.Section_declarationContext ctx) {
 		String groupName = ctx.name.getText();
-		Playback.Group group = new Playback.Group();
+		Playback.Section group = new Playback.Section();
 		
 		for (MdlParser.CommandContext child: ctx.command()){
 			Command command = (Command) visit(child);
@@ -92,7 +113,6 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 	/*** Playback Object ***/
 	
 	@Override public Object visitHarmony(@NotNull MdlParser.HarmonyContext ctx){
-		//return visitChildren(ctx);
 		Playback.Harmony harmony = new Playback.Harmony();
 		for (MdlParser.NoteContext notectx : ctx.note()){
 			Note note = (Note) visit(notectx);
@@ -103,7 +123,6 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 	}
 	
 	@Override public Object visitLoop(@NotNull MdlParser.LoopContext ctx){
-		//return visitChildren(ctx);
 		int n = Integer.parseInt(ctx.value.getText());
 		Playback.Loop loop = new Playback.Loop();
 		
@@ -117,10 +136,9 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 		return loop;
 	}
 	
-	@Override public Object visitGroup(@NotNull MdlParser.GroupContext ctx){
-		//return visitChildren(ctx);
+	@Override public Object visitSection(@NotNull MdlParser.SectionContext ctx){
 		String groupName = ctx.name.getText();
-		Playback.Group group = midi.getGroup(groupName);
+		Playback.Section group = midi.getGroup(groupName);
 		
 		if (group == null) {
 			throw new RuntimeErrorException(new Error("Can't found group " + groupName));

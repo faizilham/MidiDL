@@ -17,19 +17,20 @@ DOWN: '<';
 midi: statements;
 
 newline: '\n'+ | EOF;
-pitch_shift_sign: PLUS+ | MINUS+;
-length_shift_sign: DOT+;
 
-statements: newline* (statement newline)*;
-statement: channel_declaration | group_declaration | channel;
+statements: newline* statement*;
+statement: (channel_declaration | include | section_declaration | channel) newline;
 
 channel_declaration: '#channel' name=ID instrument=NUM;
-group_declaration: '#group' name=ID command+;
+section_declaration: '#section' name=ID command+;
 channel: channel_name=ID command+;
+include: '#include' filename=STRING;
 
-command: note | modifiers | playthrough;
+command: note | modifiers | playback;
 
 note: base=BASE_NOTE (pitch_shift=pitch_shift_sign)? (octave_shift=OCTAVE_SHIFT)? (note_length=NUM)? (length_shift=length_shift_sign)?;
+pitch_shift_sign: PLUS+ | MINUS+;
+length_shift_sign: DOT+;
 
 modifiers: tempo | length | octave | volume | pitch_transpose;
 tempo: 't' value=NUM;
@@ -40,16 +41,9 @@ octave: 'o' (shift=shift_sign (value=NUM)? | value=NUM);
 volume: 'v' (shift=shift_sign (value=NUM)? | value=NUM);
 pitch_transpose: 'p' (shift=shift_sign (value=NUM)? | ((negative=MINUS)? value=NUM));
 
-/*
-shift_octave: octave_up | octave_down;
-octave_up: '>';
-octave_down: '<';
-*/
+playback: tie | harmony | loop | section;
 
-
-playthrough: tie | harmony | loop | group;
-
-group: name=ID;
+section: name=ID;
 tie: note1=note '&' note2=note;
 harmony: '(' note+ ')';
 loop: '[' command+ ']' value=NUM;

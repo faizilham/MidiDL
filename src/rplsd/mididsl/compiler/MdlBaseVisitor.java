@@ -18,6 +18,13 @@ public class MdlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Md
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitInclude(@NotNull MdlParser.IncludeContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitNote(@NotNull MdlParser.NoteContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -61,6 +68,13 @@ public class MdlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Md
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitStatements(@NotNull MdlParser.StatementsContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitSection(@NotNull MdlParser.SectionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -151,14 +165,14 @@ public class MdlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Md
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPlaythrough(@NotNull MdlParser.PlaythroughContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPlayback(@NotNull MdlParser.PlaybackContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitGroup_declaration(@NotNull MdlParser.Group_declarationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitSection_declaration(@NotNull MdlParser.Section_declarationContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -166,11 +180,4 @@ public class MdlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Md
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitShift_sign(@NotNull MdlParser.Shift_signContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitGroup(@NotNull MdlParser.GroupContext ctx) { return visitChildren(ctx); }
 }

@@ -12,6 +12,12 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface MdlVisitor<T> extends ParseTreeVisitor<T> {
 	/**
+	 * Visit a parse tree produced by {@link MdlParser#include}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInclude(@NotNull MdlParser.IncludeContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MdlParser#note}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -53,6 +59,12 @@ public interface MdlVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStatements(@NotNull MdlParser.StatementsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MdlParser#section}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSection(@NotNull MdlParser.SectionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MdlParser#modifiers}.
 	 * @param ctx the parse tree
@@ -126,27 +138,21 @@ public interface MdlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitChannel_declaration(@NotNull MdlParser.Channel_declarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MdlParser#playthrough}.
+	 * Visit a parse tree produced by {@link MdlParser#playback}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPlaythrough(@NotNull MdlParser.PlaythroughContext ctx);
+	T visitPlayback(@NotNull MdlParser.PlaybackContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MdlParser#group_declaration}.
+	 * Visit a parse tree produced by {@link MdlParser#section_declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitGroup_declaration(@NotNull MdlParser.Group_declarationContext ctx);
+	T visitSection_declaration(@NotNull MdlParser.Section_declarationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MdlParser#shift_sign}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitShift_sign(@NotNull MdlParser.Shift_signContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MdlParser#group}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGroup(@NotNull MdlParser.GroupContext ctx);
 }

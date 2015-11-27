@@ -73,9 +73,9 @@ public abstract class Playback implements Command{
 		}
 	}
 	
-	public static class Group extends Playback{
+	public static class Section extends Playback{
 		private ArrayList<Command> commands;
-		public Group(){
+		public Section(){
 			commands = new ArrayList<>();
 		}
 		
@@ -93,7 +93,7 @@ public abstract class Playback implements Command{
 		
 		@Override
 		public Command duplicate() {
-			Group group = new Group();
+			Section group = new Section();
 			
 			for (Command command : commands){
 				group.addCommand(command.duplicate());

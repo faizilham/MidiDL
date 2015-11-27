@@ -49,9 +49,7 @@ public class Note implements Command{
 		lengthMultiplier = (exp2(lengthModifier) - 1);
 		lengthDivider = exp2(lengthModifier-1);
 	}
-	
-	
-	
+		
 	public void setup (int channelPitchTranspose, int currentOctave, int volume, int defaultLength, long startTick, int tempo){
 		this.startTick = startTick;
 		
@@ -114,7 +112,6 @@ public class Note implements Command{
 	public long getStartTick() {
 		return startTick;
 	}
-
 
 	public long getEndTick() {
 		return endTick;
