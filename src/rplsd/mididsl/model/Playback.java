@@ -30,6 +30,17 @@ public abstract class Playback implements Command{
 			}
 			
 			channel.setTicks(lastTick);
+		}
+
+		@Override
+		public Command duplicate() {
+			Harmony harmony = new Harmony();
+			
+			for (Note note : notes){
+				harmony.addNote(note.duplicate());
+			}
+			
+			return harmony;
 		}	
 	}
 	
@@ -50,5 +61,45 @@ public abstract class Playback implements Command{
 				command.processChannel(channel);
 			}
 		}
+
+		@Override
+		public Command duplicate() {
+			Loop loop = new Loop();
+			
+			for (Command command : commands){
+				loop.addCommand(command.duplicate());
+			}
+			return loop;
+		}
+	}
+	
+	public static class Group extends Playback{
+		private ArrayList<Command> commands;
+		public Group(){
+			commands = new ArrayList<>();
+		}
+		
+		public void addCommand(Command command){
+			commands.add(command);
+		}
+		
+		@Override
+		public void modifyChannel(Channel channel) {
+			for (Command command : commands){
+				Command copyCommand = command.duplicate();
+				copyCommand.processChannel(channel);
+			}
+		}
+		
+		@Override
+		public Command duplicate() {
+			Group group = new Group();
+			
+			for (Command command : commands){
+				group.addCommand(command.duplicate());
+			}
+			return group;
+		}
+	
 	}
 }

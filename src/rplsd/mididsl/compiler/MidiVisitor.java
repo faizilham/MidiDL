@@ -1,5 +1,7 @@
 package rplsd.mididsl.compiler;
 
+import javax.management.RuntimeErrorException;
+
 import org.antlr.v4.runtime.misc.NotNull;
 
 import rplsd.mididsl.model.Channel;
@@ -27,16 +29,29 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 		return visitChildren(ctx); 
 	}
 	
+	@Override public Playback.Group visitGroup_declaration(@NotNull MdlParser.Group_declarationContext ctx) {
+		String groupName = ctx.name.getText();
+		Playback.Group group = new Playback.Group();
+		
+		for (MdlParser.CommandContext child: ctx.command()){
+			Command command = (Command) visit(child);
+			if (command != null) group.addCommand(command);
+		}
+		
+		midi.addGroup(groupName, group);
+		return group;
+	}
+	
 	@Override public Object visitChannel(@NotNull MdlParser.ChannelContext ctx) {
 		Channel currentChannel = midi.getChannel(ctx.channel_name.getText());
 		
-		if (currentChannel != null) {
-			for (MdlParser.CommandContext child : ctx.command()){
-				Command command = (Command) visit(child);
-				if (command != null) command.processChannel(currentChannel);
-			}
-		} else {
-			System.err.println("Can't found channel " + ctx.channel_name.getText());
+		if (currentChannel == null) {
+			throw new RuntimeErrorException(new Error("Can't found channel " + ctx.channel_name.getText()));
+		}
+		
+		for (MdlParser.CommandContext child : ctx.command()){
+			Command command = (Command) visit(child);
+			if (command != null) command.processChannel(currentChannel);
 		}
 		
 		return currentChannel;
@@ -96,6 +111,18 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 		}
 		
 		return loop;
+	}
+	
+	@Override public Object visitGroup(@NotNull MdlParser.GroupContext ctx){
+		//return visitChildren(ctx);
+		String groupName = ctx.name.getText();
+		Playback.Group group = midi.getGroup(groupName);
+		
+		if (group == null) {
+			throw new RuntimeErrorException(new Error("Can't found group " + groupName));
+		}
+		
+		return group;
 	}
 	
 	@Override public Object visitTie(@NotNull MdlParser.TieContext ctx){

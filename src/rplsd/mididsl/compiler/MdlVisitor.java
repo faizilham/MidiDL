@@ -36,6 +36,12 @@ public interface MdlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTempo(@NotNull MdlParser.TempoContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MdlParser#statements}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatements(@NotNull MdlParser.StatementsContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MdlParser#modifiers}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -84,29 +90,29 @@ public interface MdlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLoop(@NotNull MdlParser.LoopContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MdlParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatement(@NotNull MdlParser.StatementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MdlParser#group_declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitGroup_declaration(@NotNull MdlParser.Group_declarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MdlParser#channel_declarations}.
+	 * Visit a parse tree produced by {@link MdlParser#group}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitChannel_declarations(@NotNull MdlParser.Channel_declarationsContext ctx);
+	T visitGroup(@NotNull MdlParser.GroupContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MdlParser#octave}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitOctave(@NotNull MdlParser.OctaveContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MdlParser#group_declarations}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGroup_declarations(@NotNull MdlParser.Group_declarationsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MdlParser#length}.
 	 * @param ctx the parse tree
@@ -119,12 +125,6 @@ public interface MdlVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitShift_octave(@NotNull MdlParser.Shift_octaveContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MdlParser#group_usage}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGroup_usage(@NotNull MdlParser.Group_usageContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MdlParser#command}.
 	 * @param ctx the parse tree

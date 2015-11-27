@@ -22,6 +22,8 @@ public class Note implements Command{
 	private boolean tickSet;
 	private boolean rest;
 	
+	private Note(){}
+	
 	public Note (String noteStr, int pitchShift, int octaveShift, int length){
 		int basenum = getBaseNoteNumber(noteStr);
 		
@@ -61,6 +63,17 @@ public class Note implements Command{
 	}
 	
 	@Override
+	public Note duplicate(){
+		Note note = new Note();
+		
+		note.midinote = midinote;
+		note.startTick = startTick; note.endTick = endTick;
+		note.volume = volume; note.length = length;
+		note.octaveShift = octaveShift; note.tickSet = tickSet; note.rest = rest;
+		return note;
+	}
+	
+	@Override
 	public void processChannel(Channel channel) {
 		if (!isTickSet()){
 			setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), channel.getTicks(), channel.getTempo());
@@ -73,7 +86,6 @@ public class Note implements Command{
 	public String toString(){
 		return String.format("(%d, %d-%d %d, %d)", midinote, startTick, endTick, length, volume);
 	}
-
 	
 	public boolean isTickSet(){
 		return tickSet;

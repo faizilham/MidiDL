@@ -17,7 +17,13 @@ public abstract class Modifier implements Command{
 		@Override
 		public void modifyChannel(Channel channel) {
 			channel.setTempo(value);
-		}		
+		}
+
+		@Override
+		public Command duplicate() {
+			return new Tempo(value);
+		}
+		
 	}
 	
 	public static class Length extends Modifier{
@@ -28,6 +34,11 @@ public abstract class Modifier implements Command{
 		@Override
 		public void modifyChannel(Channel channel) {
 			channel.setLength(value);
+		}
+		
+		@Override
+		public Command duplicate() {
+			return new Length(value);
 		}
 	}
 	
@@ -40,6 +51,11 @@ public abstract class Modifier implements Command{
 		public void modifyChannel(Channel channel) {
 			channel.setOctave(value);
 		}
+		
+		@Override
+		public Command duplicate() {
+			return new Octave(value);
+		}
 	}
 	
 	public static class Volume extends Modifier{
@@ -51,6 +67,11 @@ public abstract class Modifier implements Command{
 		public void modifyChannel(Channel channel) {
 			channel.setVolume(value);
 		}
+		
+		@Override
+		public Command duplicate() {
+			return new Volume(value);
+		}
 	}
 	
 	public static class OctaveUp extends Modifier{		
@@ -58,12 +79,22 @@ public abstract class Modifier implements Command{
 		public void modifyChannel(Channel channel) {
 			channel.setOctave(channel.getOctave() + 1);
 		}
+		
+		@Override
+		public Command duplicate() {
+			return new OctaveUp();
+		}
 	}
 	
 	public static class OctaveDown extends Modifier{		
 		@Override
 		public void modifyChannel(Channel channel) {
 			channel.setOctave(channel.getOctave() - 1);
+		}
+		
+		@Override
+		public Command duplicate() {
+			return new OctaveDown();
 		}
 	}
 	
@@ -75,6 +106,11 @@ public abstract class Modifier implements Command{
 		@Override
 		public void modifyChannel(Channel channel) {
 			channel.setShift(value);
+		}
+		
+		@Override
+		public Command duplicate() {
+			return new PitchTranspose(value);
 		}
 	}
 }

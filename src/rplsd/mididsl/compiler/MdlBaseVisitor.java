@@ -46,6 +46,13 @@ public class MdlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Md
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitStatements(@NotNull MdlParser.StatementsContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitModifiers(@NotNull MdlParser.ModifiersContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -102,6 +109,13 @@ public class MdlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Md
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitStatement(@NotNull MdlParser.StatementContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitGroup_declaration(@NotNull MdlParser.Group_declarationContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -109,7 +123,7 @@ public class MdlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Md
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitChannel_declarations(@NotNull MdlParser.Channel_declarationsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitGroup(@NotNull MdlParser.GroupContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -117,13 +131,6 @@ public class MdlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Md
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitOctave(@NotNull MdlParser.OctaveContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitGroup_declarations(@NotNull MdlParser.Group_declarationsContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -138,13 +145,6 @@ public class MdlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Md
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitShift_octave(@NotNull MdlParser.Shift_octaveContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitGroup_usage(@NotNull MdlParser.Group_usageContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
