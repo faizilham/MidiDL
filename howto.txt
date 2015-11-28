@@ -1,3 +1,11 @@
+Run Example
+-----------
+	parse and play
+		java -jar mididl.jar test.mdl
+
+	parse and save to file
+		java -jar mididl.jar test.mdl test.midi
+
 Grammar
 -------
 

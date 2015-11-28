@@ -31,5 +31,4 @@ local.properties
 
 *.bat
 *.midi
-antlr-4.4-complete.jar
-antlr-runtime-4.4.jar
+*.jar
