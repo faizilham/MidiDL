@@ -1,5 +1,6 @@
 package rplsd.mididsl.model;
 
+import javax.management.RuntimeErrorException;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
@@ -91,6 +92,23 @@ public class Note implements Command, MidiMessage{
 		return note;
 	}
 	
+	public static int GCD(int a, int b) { return b==0 ? a : GCD(b, a%b); }
+	
+	public void join(Note note){
+		if (!tickSet || !note.tickSet) throw new RuntimeErrorException(new Error("Note not yet set"));
+		if (note.midinote != note.midinote) throw new RuntimeErrorException(new Error("Different note can't be joined"));
+		
+		length = length * lengthDivider; lengthDivider = 1;
+		int notelen = note.length * note.lengthDivider;
+		endTick = note.endTick;
+		
+		lengthMultiplier = lengthMultiplier * notelen + note.lengthMultiplier*length;
+		length = length * notelen;
+		
+		int gcd = GCD (lengthMultiplier, length);
+		lengthMultiplier /= gcd; length /= gcd;
+	}
+	
 	@Override
 	public void processTrack(TrackObject track) {
 		if (!isTickSet()){
@@ -145,6 +163,10 @@ public class Note implements Command, MidiMessage{
 
 	public long getEndTick() {
 		return endTick;
+	}
+	
+	public int getOctaveShift(){
+		return octaveShift;
 	}
 
 	public int getMidinote() {

@@ -60,6 +60,12 @@ public interface MdlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPitch_transpose(@NotNull MdlParser.Pitch_transposeContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MdlParser#tie}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTie(@NotNull MdlParser.TieContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MdlParser#midi}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

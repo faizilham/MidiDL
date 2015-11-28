@@ -10,6 +10,46 @@ public abstract class Playback implements Command{
 		modifyChannel(channel);
 	}
 	
+	public static class Tie extends Playback{
+		private ArrayList<Note> notes;
+		public Tie(){
+			notes = new ArrayList<>();
+		}
+		
+		public void addNote(Note note){
+			notes.add(note);
+		}
+		
+		@Override
+		public void modifyChannel(TrackObject channel) {
+			Note first = null;
+			long lastTick = channel.getTicks();
+			for (Note note : notes){
+				note.setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), lastTick, channel.getTempo(), channel.isPercussion());
+				lastTick = note.getEndTick();
+				if (first == null){
+					first = note.duplicate();
+				} else {
+					first.join(note);
+				}
+			}
+			
+			channel.addMessage(first);
+			channel.setTicks(first.getEndTick());
+		}
+
+		@Override
+		public Command duplicate() {
+			Tie tie = new Tie();
+			
+			for (Note note : notes){
+				tie.addNote(note.duplicate());
+			}
+			
+			return tie;
+		}	
+	}
+	
 	public static class Harmony extends Playback{
 		private ArrayList<Note> notes;
 		public Harmony(){

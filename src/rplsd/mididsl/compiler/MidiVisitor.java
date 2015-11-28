@@ -138,10 +138,32 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 	
 	/*** Playback Object ***/
 	
+	@Override public Object visitTie(@NotNull MdlParser.TieContext ctx) {
+		Playback.Tie tie = new Playback.Tie();
+		Note first = null;
+		
+		for (MdlParser.NoteContext notectx : ctx.notes){
+			Note note = (Note) visit(notectx);
+			
+			if (first == null){
+				first = note;
+			} else {
+				if ((first.getMidinote() != note.getMidinote()) || (first.getOctaveShift() != note.getOctaveShift())){
+					throw new RuntimeErrorException(new Error("Tie can only connect same-pitched notes"));
+				}
+			}
+			
+			tie.addNote(note);
+		}
+		
+		return tie;
+	}
+	
 	@Override public Object visitHarmony(@NotNull MdlParser.HarmonyContext ctx){
 		Playback.Harmony harmony = new Playback.Harmony();
+		
 		for (MdlParser.NoteContext notectx : ctx.note()){
-			Note note = (Note) visit(notectx);
+			Note note = (Note) visit(notectx);	
 			harmony.addNote(note);
 		}
 		
@@ -163,14 +185,14 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 	}
 	
 	@Override public Object visitSection(@NotNull MdlParser.SectionContext ctx){
-		String groupName = ctx.name.getText();
-		Playback.Section group = midi.getGroup(groupName);
+		String name = ctx.name.getText();
+		Playback.Section section = midi.getGroup(name);
 		
-		if (group == null) {
-			throw new RuntimeErrorException(new Error("Can't found group " + groupName));
+		if (section == null) {
+			throw new RuntimeErrorException(new Error("Can't found group " + name));
 		}
 		
-		return group;
+		return section;
 	}
 	
 	/*** Modifiers Object ***/
