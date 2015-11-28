@@ -25,7 +25,7 @@ public abstract class Playback implements Command{
 			Note first = null;
 			long lastTick = channel.getTicks();
 			for (Note note : notes){
-				note.setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), lastTick, channel.getTempo(), channel.isPercussion());
+				note.setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), lastTick, channel.getTempo(), channel.getChannel());
 				lastTick = note.getEndTick();
 				if (first == null){
 					first = note.duplicate();
@@ -64,7 +64,7 @@ public abstract class Playback implements Command{
 		public void modifyChannel(TrackObject channel) {
 			long lastTick = 0;
 			for (Note note : notes){
-				note.setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), channel.getTicks(), channel.getTempo(), channel.isPercussion());
+				note.setup(channel.getShift(), channel.getOctave(), channel.getVolume(), channel.getLength(), channel.getTicks(), channel.getTempo(), channel.getChannel());
 				channel.addMessage(note);
 				lastTick = note.getEndTick();
 			}

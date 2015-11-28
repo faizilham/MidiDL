@@ -18,15 +18,15 @@ public class TrackObject {
 	private ArrayList<MidiMessage> messages;
 	private long ticks;
 	private String name;
-	private boolean percussion;
+	private int channel;
 	
-	public TrackObject(String name, int instrument, boolean percussion){
+	public TrackObject(String name, int instrument, int channel){
 		this.instrument = instrument;
 		messages = new ArrayList<>();
 		
 		// default value
 		tempo = BASE_TEMPO; length = 4; octave = 5; volume = 64; shift = 0; ticks = 32; // starting pause 64 ticks
-		this.percussion = percussion;
+		this.setChannel(channel);
 		this.name = name;
 	}
 	
@@ -48,10 +48,10 @@ public class TrackObject {
 		track.add(me);
 		
 		// set instrument if not percussion
-		if (!percussion){
+		if (channel != MidiObject.PERCUSSION_CHANNEL){
 			ShortMessage mm = new ShortMessage();
-			mm.setMessage(0xC0, (byte) instrument, 0x00);
-			me = new MidiEvent(mm,(long)0);
+			mm.setMessage((byte) (0xC0 + channel), (byte) instrument, 0x00);
+			me = new MidiEvent(mm,(long)1);
 			track.add(me);
 		}
 		
@@ -59,7 +59,7 @@ public class TrackObject {
 		mt = new MetaMessage();
         byte[] bt = {(byte)0x07, (byte)0xA1, (byte)0x20};
 		mt.setMessage(0x51 ,bt, bt.length);
-		me = new MidiEvent(mt,(long)0);
+		me = new MidiEvent(mt,(long)1);
 		
 				
 		for (MidiMessage message : messages){
@@ -150,7 +150,12 @@ public class TrackObject {
 		this.tempo = tempo;
 	}
 
-	public boolean isPercussion() {
-		return percussion;
-	}	
+	public int getChannel() {
+		return channel;
+	}
+
+	public void setChannel(int channel) {
+		this.channel = channel;
+	}
+
 }

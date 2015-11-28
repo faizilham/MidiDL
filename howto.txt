@@ -1,0 +1,72 @@
+Grammar
+-------
+
+Setiap lagu terdiri dari track & section. Nada dan perintah lainnya berada dalam track atau section. section dipanggil dalam track atau section lainnya. Tiap track dimainkan bersamaan dengan track lainnya.
+
+1. Deklarasi track
+	format: #track @nama_track no_instrument_midi // maksimum 15 instrumen berbeda selain perkusi
+
+	#track @piano 0
+	#track @piano $GrandPiano
+
+2. Memberi nama suatu angka / konstanta
+	format: #constant $nama_konstanta nilai
+
+	#constant $GrandPiano 0
+	// semua bagian yang menggunakan angka (misalnya panjang not, jumlah loop, nilai modifier) bisa menggunakan konstanta yg telah dideklarasikan
+
+3. Include file lain
+	#include "namafile.mdl" // jika ada track pada file tsb, track tsb akan juga dimainkan
+
+4. Deklarasi section
+	format: #section @nama_section: <perintah>
+
+	#section @doremi: cdefgabc' // ini memainkan do-re-mi sampai do oktaf berikutnya
+
+5. Menambahkan perintah ke track
+	format: @nama_track: <perintah>
+
+	@piano: cde @doremi // memainkan c-d-e dan memanggil section @doremi
+	@piano: abc' // setelah itu memainkan a-b-c'
+
+6. Komentar
+	// komentar
+
+7. Deklarasi track perkusi
+	#percussion @perkusi // penggunaan perkusi sesuai dengan format midi
+	@perkusi: <perintah> // penambahan perintah sama dengan track biasa
+
+Perintah
+--------
+1. Not
+	format: <nada><sharp/flat><high_octave><panjang><half_dot>
+	contoh:
+		c+''8 // Not c-sharp 2 oktaf sepanjang 1/8
+		d-- // Not d 2-flat (sama dengan c) sepanjang panjang default
+		r4. // rest 3/8
+2. Track Modifier
+	- tempo: t192 // set tempo track 192 bpm (1 beat = 1/4 note). range: 1 - 512
+	- length: l8 // set panjang nada default pada track menjadi 1/8. range: 1 - 256
+	- octave:
+		o5 // set oktaf track ke 5 (5 = middle, o5 c = memainkan middle C). range: 0 - 10
+		o> // naikkan oktaf track 1 level. misal "o5 c o> d", berarti memainkan c oktaf 5 dan d oktaf 6
+	- volume: 
+		v100 // set volume (midi velocity, sebarapa kuat not dimainkan) ke 100. range 0 - 127
+		v<20 // turunkan volume 20 level
+	- pitch transpose: 
+		p2 // set pitch 2 half-note ke atas. "p0 c+" setara dengan "p1 c" atau "p-1 d"
+		p< // turunkan pitch 1 level (tidak bisa dengan tanda minus)
+
+3. Playback
+	- tie
+		format: <not> & <not> (& ...)
+		c4 & c8 & c2 // memainkan tie C1/4 + C1/8 + C1/2 = C7/8
+	- harmoni
+		format: (<not> (...))
+		(ceg) // memainkan harmoni C - E - G
+	- section
+		@doremi // memanggil section @doremi
+		o> @doremi // menaikkan oktaf, sehingga @doremi dimainkan di oktaf yg lebih tinggi
+	- loop
+		format: [ <perintah> ]<jumlah>
+		o5 [cd o>]3 // setara dengan "o5 cd o> cd o> cd o>"
