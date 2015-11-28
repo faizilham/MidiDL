@@ -6,11 +6,11 @@ import java.io.IOException;
 
 import javax.management.RuntimeErrorException;
 
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import rplsd.mididsl.compiler.MdlParser.Shift_signContext;
+import rplsd.mididsl.compiler.MdlParser.ValContext;
 import rplsd.mididsl.model.Command;
 import rplsd.mididsl.model.MidiObject;
 import rplsd.mididsl.model.Modifier;
@@ -23,12 +23,27 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 	private MidiObject midi = null;
 	private static final char FLAT_NOTE = '-';
 	private static final char DEC_SIGN = '<';
+	private static final char CONSTANT_SIGN = '$';
+	
 	
 	@Override public MidiObject visitMidi(@NotNull MdlParser.MidiContext ctx) {
 		if (midi == null)
 			midi = new MidiObject();
 		visitChildren(ctx);
 		return midi; 
+	}
+	
+	private int parseNum(String token){
+		if (token.charAt(0) != CONSTANT_SIGN){
+			return Integer.parseInt(token);
+		} else {
+			Integer i = midi.getConstant(token);
+			if (i == null){
+				throw new RuntimeErrorException(new Error("Can't found constant " + token));
+			} else {
+				return i;
+			}
+		}
 	}
 	
 	@Override public Object visitInclude(@NotNull MdlParser.IncludeContext ctx) {
@@ -46,9 +61,16 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 		return null;
 	}
 	
+	@Override public Object visitConstant_declaration(@NotNull MdlParser.Constant_declarationContext ctx) {
+		String name = ctx.name.getText();
+		int value = parseNum(ctx.value.getText());
+		midi.addConstant(name, value);
+		return visitChildren(ctx); 
+	}
+	
 	@Override public Object visitTrack_declaration(@NotNull MdlParser.Track_declarationContext ctx) {
 		String name = ctx.name.getText();
-		int instrument = Integer.parseInt(ctx.instrument.getText());
+		int instrument = parseNum(ctx.instrument.getText());
 		midi.addTrack(name, instrument, false);		
 		return visitChildren(ctx); 
 	}
@@ -103,7 +125,7 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 		}
 		
 		String lenStr = ctx.note_length == null ? null : ctx.note_length.getText();
-		int length = (lenStr == null) ? 0 : Integer.parseInt(lenStr);
+		int length = (lenStr == null) ? 0 : parseNum(lenStr);
 		
 		int halfLength = 0;
 		if (ctx.length_shift != null){
@@ -127,7 +149,7 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 	}
 	
 	@Override public Object visitLoop(@NotNull MdlParser.LoopContext ctx){
-		int n = Integer.parseInt(ctx.value.getText());
+		int n = parseNum(ctx.value.getText());
 		Playback.Loop loop = new Playback.Loop();
 		
 		for (int i = 0; i < n; ++i){
@@ -153,25 +175,25 @@ public class MidiVisitor extends MdlBaseVisitor<Object> {
 	
 	/*** Modifiers Object ***/
 	@Override public Modifier visitTempo(@NotNull MdlParser.TempoContext ctx) {
-		int value = Integer.parseInt(ctx.value.getText());
+		int value = parseNum(ctx.value.getText());
 		
 		return new Modifier.Tempo(value); 
 	}
 	
 	@Override public Modifier visitLength(@NotNull MdlParser.LengthContext ctx) {
-		int value = Integer.parseInt(ctx.value.getText());
+		int value = parseNum(ctx.value.getText());
 		
 		return new Modifier.Length(value); 
 	}
 	
-	private int[] readIncrease(Token value, Shift_signContext shift, int defaultIncrease){
+	private int[] readIncrease(ValContext value, Shift_signContext shift, int defaultIncrease){
 		int val; int increase;
 				
 		if (shift == null){ // set modifier
-			val = Integer.parseInt(value.getText());
+			val = parseNum(value.getText());
 			increase = 0;
 		} else { // increase modifier
-			val = (value == null) ? defaultIncrease : Integer.parseInt(value.getText());
+			val = (value == null) ? defaultIncrease : parseNum(value.getText());
 			increase = 1;
 			if (shift.getText().charAt(0) == DEC_SIGN) val = -val;
 		}

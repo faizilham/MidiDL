@@ -1,0 +1,128 @@
+#constant $Accordion 22
+#constant $AcousticBass 33
+#constant $AcousticGrandPiano 1
+#constant $AcousticGuitarNylon 25
+#constant $AcousticGuitarSteel 26
+#constant $Agogo 114
+#constant $AltoSax 66
+#constant $Applause 127
+#constant $Bagpipe 110
+#constant $Banjo 106
+#constant $BaritoneSax 68
+#constant $Bassoon 71
+#constant $BirdTweet 124
+#constant $BlownBottle 77
+#constant $BrassSection 62
+#constant $BreathNoise 122
+#constant $BrightAcousticPiano 2
+#constant $Celesta 9
+#constant $Cello 43
+#constant $ChoirAahs 53
+#constant $ChurchOrgan 20
+#constant $Clarinet 72
+#constant $Clavi 8
+#constant $Contrabass 44
+#constant $DistortionGuitar 31
+#constant $DrawbarOrgan 17
+#constant $Dulcimer 16
+#constant $ElectricBassFinger 34
+#constant $ElectricBassPick 35
+#constant $ElectricGrandPiano 3
+#constant $ElectricGuitarClean 28
+#constant $ElectricGuitarJazz 27
+#constant $ElectricGuitarMuted 29
+#constant $ElectricPiano1 5
+#constant $ElectricPiano2 6
+#constant $EnglishHorn 70
+#constant $FX1 97				//rain
+#constant $FX2 98				//soundtrack
+#constant $FX3 99				//crystal
+#constant $FX4 100				//atmosphere
+#constant $FX5 101				//brightness
+#constant $FX6 102				//goblins
+#constant $FX7 103				//echoes
+#constant $FX8 104				//sci-fi
+#constant $Fiddle 111
+#constant $Flute 74
+#constant $FrenchHorn 61
+#constant $FretlessBass 36
+#constant $Glockenspiel 10
+#constant $GuitarFretNoise 121
+#constant $GuitarHarmonics 32
+#constant $Gunshot 128
+#constant $Harmonica 23
+#constant $Harpsichord 7
+#constant $Helicopter 126
+#constant $HonkyTonkPiano 4
+#constant $Kalimba 109
+#constant $Koto 108
+#constant $Lead1 81				//square
+#constant $Lead2 82				//sawtooth
+#constant $Lead3 83				//calliope
+#constant $Lead4 84				//chiff
+#constant $Lead5 85				//charang
+#constant $Lead6 86				//voice
+#constant $Lead7 87				//fifths
+#constant $Lead8 88				//bass+lead
+#constant $Marimba 13
+#constant $MelodicTom 118
+#constant $MusicBox 11
+#constant $MutedTrumpet 60
+#constant $Oboe 69
+#constant $Ocarina 80
+#constant $OrchestraHit 56
+#constant $OrchestralHarp 47
+#constant $OverdrivenGuitar 30
+#constant $Pad1 89				//newage
+#constant $Pad2 90				//warm
+#constant $Pad3 91				//polysynth
+#constant $Pad4 92				//choir
+#constant $Pad5 93				//bowed
+#constant $Pad6 94				//metallic
+#constant $Pad7 95				//halo
+#constant $Pad8 96				//sweep
+#constant $PanFlute 76
+#constant $PercussiveOrgan 18
+#constant $Piccolo 73
+#constant $PizzicatoStrings 46
+#constant $Recorder 75
+#constant $ReedOrgan 21
+#constant $ReverseCymbal 120
+#constant $RockOrgan 19
+#constant $Seashore 123
+#constant $Shakuhachi 78
+#constant $Shamisen 107
+#constant $Shanai 112
+#constant $Sitar 105
+#constant $SlapBass1 37
+#constant $SlapBass2 38
+#constant $SopranoSax 65
+#constant $SteelDrums 115
+#constant $StringEnsemble1 49
+#constant $StringEnsemble2 50
+#constant $SynthBass1 39
+#constant $SynthBass2 40
+#constant $SynthBrass1 63
+#constant $SynthBrass2 64
+#constant $SynthDrum 119
+#constant $SynthStrings1 51
+#constant $SynthStrings2 52
+#constant $SynthVoice 55
+#constant $TaikoDrum 117
+#constant $TangoAccordion 24
+#constant $TelephoneRing 125
+#constant $TenorSax 67
+#constant $Timpani 48
+#constant $TinkleBell 113
+#constant $TremoloStrings 45
+#constant $Trombone 58
+#constant $Trumpet 57
+#constant $Tuba 59
+#constant $TubularBells 15
+#constant $Vibraphone 12
+#constant $Viola 42
+#constant $Violin 41
+#constant $VoiceOohs 54
+#constant $Whistle 79
+#constant $Woodblock 116
+#constant $Xylophone 14

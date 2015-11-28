@@ -1,7 +1,10 @@
+#include "instruments.mdl"
 
-#track @piano5 11
-#section @chord1 o2 (cba) o0
+// tracks
+#track @beller $MusicBox
 
-#section @test3 cde (cde)
+// sections
+#section @chord1: o2 (cba) o0
+#section @test3: cde (cde)
 
-@piano5 o5 l4 t120 @test3
+@beller: o5 l4 t120 @test3 o< @test3

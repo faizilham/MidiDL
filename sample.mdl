@@ -1,4 +1,4 @@
 // setup channels
 #track @piano 0
 
-@piano ef
+@piano: ef

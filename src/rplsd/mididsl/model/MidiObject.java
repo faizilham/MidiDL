@@ -9,24 +9,33 @@ import javax.sound.midi.Sequence;
 public class MidiObject {
 	private HashMap<String, TrackObject> tracks;
 	private HashMap<String, Playback.Section> groups;
+	private HashMap<String, Integer> constants;
 	
 	public MidiObject(){
 		tracks = new HashMap<>();
 		groups = new HashMap<>();
+		constants = new HashMap<>();
 	}
 	
 	public Sequence generateMidiSequence() throws InvalidMidiDataException{
 		Sequence seq = new Sequence(javax.sound.midi.Sequence.PPQ, Note.PPQ);
 		
 		Iterator <Entry<String, TrackObject>> it = tracks.entrySet().iterator();
-		
-		
+				
 		while (it.hasNext()){
 			TrackObject track = it.next().getValue();
 			track.generateTrack(seq);
 		}
 		
 		return seq;
+	}
+	
+	public Integer getConstant(String name){
+		return constants.get(name);
+	}
+	
+	public void addConstant(String name, int value){
+		constants.put(name, value);
 	}
 	
 	public Playback.Section getGroup(String groupName){
