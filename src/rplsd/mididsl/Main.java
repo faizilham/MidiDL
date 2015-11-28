@@ -14,7 +14,7 @@ public class Main {
 			MidiObject midi = reader.buildModel(new FileInputStream(new File("test.mdl")));
 			//System.out.println(midi);
 			
-			MidiGenerator gen = new MidiGenerator(midi); gen.write(new File("test.midi"));
+			MidiGenerator gen = new MidiGenerator(midi); gen.play(); //gen.write(new File("test.midi"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
